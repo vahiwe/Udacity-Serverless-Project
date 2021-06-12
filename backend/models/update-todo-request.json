@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "todo",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "dueDate": {
+        "type": "string",
+        "pattern": "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$"
+
+      },
+      "done": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "name",
+      "dueDate",
+      "done"
+    ],
+    "additionalProperties": false
+}
+  
