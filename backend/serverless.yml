@@ -5,6 +5,15 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
 
+custom:
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules: true
+
+# Uncomment to enable individual packaging
+package:
+  individually: true
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -128,6 +137,17 @@ functions:
 resources:
   Resources:
     # TODO: Add any necessary AWS resources
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
     TodosTable:
       Type: AWS::DynamoDB::Table
       Properties:
