@@ -1,14 +1,8 @@
 import 'source-map-support/register'
-import * as AWS  from 'aws-sdk'
 import { createLogger } from '../../utils/logger'
-import { parseUserId } from '../../auth/utils'
+import { getAllTodos } from '../../businessLogic/todos'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 const logger = createLogger('getTodos')
-
-const docClient = new AWS.DynamoDB.DocumentClient()
-
-const todoTable = process.env.TODOS_TABLE
-const userIdIndex = process.env.USER_ID_INDEX
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // TODO: Get all TODO items for a current user
@@ -16,21 +10,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')
   const jwtToken = split[1]
-  const userId = parseUserId(jwtToken)
-  logger.info('User was authorized', userId)
+  
+  logger.info('Getting all groups')
 
-  const result = await docClient
-    .query({
-      TableName: todoTable,
-      IndexName: userIdIndex,
-      KeyConditionExpression: 'userId = :u',
-      ExpressionAttributeValues: {
-        ':u': userId
-      }
-    })
-    .promise()
-
-  const items = result.Items
+  const items = await getAllTodos(jwtToken)
 
   logger.info('Get events:  ', {...items})
 

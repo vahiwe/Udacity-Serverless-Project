@@ -12,20 +12,16 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
 
+  tracing:
+    lambda: true
+    apiGateway: true
+
   environment:
     TODOS_TABLE: Todo-${self:provider.stage}
     TODO_USER_ID_INDEX: TodoUserIdIndex
     USER_ID_INDEX: UserIdIndex
     IMAGES_S3_BUCKET: serverless-todo-images-${self:provider.stage}-vahiwe
     SIGNED_URL_EXPIRATION: 300
-
-    # CONNECTIONS_TABLE: Connections-${self:provider.stage}
-    # IMAGES_TABLE: Images-${self:provider.stage}
-    
-    # THUMBNAILS_S3_BUCKET: serverless-udagram-thumbnail-${self:provider.stage}-vahiwe
-    # # AUTH_0_SECRET: oiikko
-    # AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
-    # AUTH_0_SECRET_FIELD: auth0Secret
 
 functions:
 
